@@ -153,9 +153,10 @@ c
 c
 cc     additional fmm variables
 
-      integer lmptot
+      integer *8 lmptot
       real *8, allocatable :: rscales(:)
-      integer, allocatable :: nterms(:),iaddr(:,:)
+      integer, allocatable :: nterms(:)
+      integer *8, allocatable :: iaddr(:,:)
       real *8, allocatable :: rmlexp(:)
       complex *16, allocatable :: mptemp(:)
 
@@ -397,7 +398,7 @@ c     irmlexp is pointer for workspace need by various fmm routines,
 c
       call bh2dmpalloc(nd,itree,iaddr,nlevels,lmptot,
      1     nterms)
-      if(ifprint .eq. 1) call prinf(' lmptot is *',lmptot,1)
+      if(ifprint .eq. 1) print *, ' lmptot is ', lmptot
 
       allocate(rmlexp(lmptot),stat=ier)
 
@@ -528,7 +529,7 @@ c    - nexpc: integer
 c        number of expansion centers
 c    - expcsort: real *8 (2,nexpc)
 c        expansion center locations
-c    - iaddr: integer (2,nboxes)
+c    - iaddr: integer *8 (2,nboxes)
 c        pointer in rmlexp where multipole and local expansions for 
 c        each box is stored
 c        * iaddr(1,ibox) is the starting index in rmlexp for the 
@@ -638,7 +639,8 @@ c------------------------------------------------------------------
       complex *16 gradtarg(nd,3,*)
       complex *16 hesstarg(nd,3,*)
 
-      integer iaddr(2,nboxes),lmptmp
+      integer *8 iaddr(2,nboxes)
+      integer lmptmp
       real *8 rmlexp(*)
       complex *16 mptemp(lmptmp)
        
@@ -1482,17 +1484,19 @@ c                 level
 c
 c------------------------------------------------------------------
 c     Output arguments
-c     iaddr       out: Integer(2,nboxes)
+c     iaddr       out: Integer *8 (2,nboxes)
 c                 Points the multipole and local expansions in box i
 c 
-c     lmptot      out: Integer
+c     lmptot      out: Integer *8
 c                 Total length of expansions array required
 c------------------------------------------------------------------
 
       implicit none
       integer nlevels,nterms(0:nlevels),nd,nsig,nt1,nt2,next235
-      integer iaddr(2,*), lmptot, laddr(2,0:nlevels)
-      integer ibox,i,iptr,istart,nn,itmp
+      integer *8 iaddr(2,*), lmptot
+      integer laddr(2,0:nlevels)
+      integer ibox,i,iptr
+      integer *8 istart,nn,itmp
       real *8 ddn
 c
       istart = 1

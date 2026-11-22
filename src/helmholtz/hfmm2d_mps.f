@@ -82,9 +82,10 @@ c
 c
 cc     additional fmm variables
 
-      integer lmptot
+      integer *8 lmptot
       real *8, allocatable :: rscales(:)
-      integer, allocatable :: nterms(:),iaddr(:,:)
+      integer, allocatable :: nterms(:)
+      integer *8, allocatable :: iaddr(:,:)
       real *8, allocatable :: rmlexp(:)
       complex *16, allocatable :: mptemp(:)
 
@@ -233,7 +234,7 @@ c     irmlexp is pointer for workspace need by various fmm routines,
 c
       call h2dmpalloc(nd,itree(iptr(1)),iaddr,nlevels,lmptot,
      1    nterms)
-      if(ifprint .eq. 1) call prinf(' lmptot is *',lmptot,1)
+      if(ifprint .eq. 1) print *, ' lmptot is ', lmptot
 
       ier = 0
       allocate(rmlexp(lmptot),stat=iert)
@@ -327,7 +328,7 @@ c                      starting index in rmlexp
 c                      for the local expansion of ibox
 c  rmlexp: real *8 (lmptot)
 c      multipole expansion for tree hierarchy
-c  lmptot: integer
+c  lmptot: integer *8
 c      length of multipole expansion array for quad tree
 c  mptemp: (lmptmp): temporary multipole/local expansion
 c                        (may not be needed in new setting)
@@ -396,7 +397,8 @@ c------------------------------------------------------------------
       complex *16 mpolesort(ntot),localsort(ntot)
       integer impolesort(nmpole)
 
-      integer iaddr(4,nboxes),lmptmp,lmptot
+      integer *8 iaddr(4,nboxes),lmptot
+      integer lmptmp
       real *8 rmlexp(*)
       complex *16 mptemp(lmptmp)
        

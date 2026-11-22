@@ -112,9 +112,10 @@ c
 c
 cc     additional fmm variables
 
-      integer lmptot
+      integer *8 lmptot
       real *8, allocatable :: rscales(:)
-      integer, allocatable :: nterms(:),iaddr(:,:)
+      integer, allocatable :: nterms(:)
+      integer *8, allocatable :: iaddr(:,:)
       real *8, allocatable :: rmlexp(:)
       complex *16, allocatable :: mptemp(:)
 
@@ -369,7 +370,7 @@ c     irmlexp is pointer for workspace need by various fmm routines,
 c
       call h2dmpalloc(nd,itree(iptr(1)),iaddr,nlevels,lmptot,
      1    nterms)
-      if(ifprint .eq. 1) call prinf(' lmptot is *',lmptot,1)
+      if(ifprint .eq. 1) print *, ' lmptot is ', lmptot
 
       ier = 0
       allocate(rmlexp(lmptot),stat=iert)
@@ -642,7 +643,8 @@ c------------------------------------------------------------------
       complex *16 gradtarg(nd,2,*)
       complex *16 hesstarg(nd,3,*)
 
-      integer iaddr(4,nboxes),lmptmp
+      integer *8 iaddr(4,nboxes)
+      integer lmptmp
       real *8 rmlexp(*)
       complex *16 mptemp(lmptmp)
        
@@ -1910,17 +1912,19 @@ c                 level
 c
 c------------------------------------------------------------------
 c     Output arguments
-c     iaddr       out: Integer(4,nboxes)
+c     iaddr       out: Integer *8 (4,nboxes)
 c                 Points the multipole and local expansions in box i
 c 
-c     lmptot      out: Integer
+c     lmptot      out: Integer *8
 c                 Total length of expansions array required
 c------------------------------------------------------------------
 
       implicit none
       integer nlevels,nterms(0:nlevels),nd,nsig,nt1,nt2,next235
-      integer iaddr(4,*), lmptot, laddr(2,0:nlevels)
-      integer ibox,i,iptr,istart,nn,itmp
+      integer *8 iaddr(4,*), lmptot
+      integer laddr(2,0:nlevels)
+      integer ibox,i,iptr
+      integer *8 istart,nn,itmp
       real *8 ddn,dn
 c
       istart = 1

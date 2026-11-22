@@ -116,9 +116,10 @@ c
 c
 cc     additional fmm variables
 
-      integer lmptot
+      integer *8 lmptot
       real *8, allocatable :: rscales(:)
-      integer, allocatable :: nterms(:),iaddr(:,:)
+      integer, allocatable :: nterms(:)
+      integer *8, allocatable :: iaddr(:,:)
       real *8, allocatable :: rmlexp(:)
       complex *16, allocatable :: mptemp(:)
 
@@ -362,7 +363,7 @@ c     irmlexp is pointer for workspace need by various fmm routines,
 c
       call h2dmpalloc(nd,itree(iptr(1)),iaddr,nlevels,lmptot,
      1    nterms)
-      if(ifprint .eq. 1) call prinf(' lmptot is *',lmptot,1)
+      if(ifprint .eq. 1) print *, ' lmptot is ', lmptot
 
       ier = 0
       allocate(rmlexp(lmptot),stat=iert)

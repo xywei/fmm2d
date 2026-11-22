@@ -133,9 +133,11 @@ c
 c
 cc     additional fmm variables
 
-      integer lmptot, ldc
+      integer *8 lmptot
+      integer ldc
       real *8, allocatable :: rscales(:)
-      integer, allocatable :: nterms(:),iaddr(:,:)
+      integer, allocatable :: nterms(:)
+      integer *8, allocatable :: iaddr(:,:)
       real *8, allocatable :: rmlexp(:),carray(:,:)
 
 c
@@ -379,7 +381,7 @@ c     irmlexp is pointer for workspace need by various fmm routines,
 c
       call mbh2dmpalloc(nd,itree(iptr(1)),iaddr,nlevels,lmptot,
      1    nterms)
-      if(ifprint .eq. 1) call prinf(' lmptot is *',lmptot,1)
+      if(ifprint .eq. 1) print *, ' lmptot is ', lmptot
 
       ier = 0
       allocate(rmlexp(lmptot),stat=iert)
@@ -625,7 +627,8 @@ c------------------------------------------------------------------
       real *8 gradtarg(nd,2,*)
       real *8 hesstarg(nd,3,*)
 
-      integer iaddr(4,nboxes),lmptmp
+      integer *8 iaddr(4,nboxes)
+      integer lmptmp
       real *8 rmlexp(*)
        
       real *8 timeinfo(10)
@@ -1344,21 +1347,23 @@ c                 level
 c
 c------------------------------------------------------------------
 c     Output arguments
-c     iaddr       out: Integer(4,nboxes)
+c     iaddr       out: Integer *8 (4,nboxes)
 c     Points to the multipole and local expansions in box i
 c     iaddr(1,ibox) - difference type multipole exp
 c     iaddr(2,ibox) - Yukawa (Bessel K) type multipole exp
 c     iaddr(3,ibox) - difference type local exp
 c     iaddr(4,ibox) - Laplace (power series) type multipole exp
 c 
-c     lmptot      out: Integer
+c     lmptot      out: Integer *8
 c                 Total length of expansions array required
 c------------------------------------------------------------------
 
       implicit none
       integer nlevels,nterms(0:nlevels),nd,nsig,nt1,nt2,next235
-      integer iaddr(4,*), lmptot, laddr(2,0:nlevels)
-      integer ibox,i,iptr,istart,nn,itmp
+      integer *8 iaddr(4,*), lmptot
+      integer laddr(2,0:nlevels)
+      integer ibox,i,iptr
+      integer *8 istart,nn,itmp
       real *8 ddn
 c
       istart = 1
