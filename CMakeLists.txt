@@ -35,6 +35,11 @@ execute_process(
 # build static lib libfmm2d.a
 # source files for libfmm2d.a
 file(GLOB_RECURSE source_list "src/*.f" "src/*.f90")
+# FFTPACK ships twice under src/common: dfft.f (SAVEd work arrays, not thread-safe) and
+# dfft_threadsafe.f, which define the same routines.  The makefile builds only the
+# thread-safe copy (COMOBJS uses dfft_threadsafe.o); do the same here, or the library
+# links the SAVEd copy and the Helmholtz FMM returns wrong results under OpenMP.
+list(FILTER source_list EXCLUDE REGEX ".*/src/common/dfft\\.f$")
 #message(${source_list})
 # add fmm2d static lib
 add_library(fmm2d STATIC ${source_list})
